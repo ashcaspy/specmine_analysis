@@ -1,0 +1,70 @@
+name,group,type,selected,reason,selection_method,source,risk
+spec_tool,artifact_context,categorical,True,SDD tool/path classification from the spec record.,automatic_candidate,spec_files,pre-outcome candidate
+repo_language,repository_context,categorical,True,Repository primary language at collection time.,automatic_candidate,spec_files,pre-outcome candidate
+repo_license_spdx_id,repository_context,categorical,True,Repository license category.,automatic_candidate,spec_files,pre-outcome candidate
+repo_visibility,repository_context,categorical,True,Repository visibility category.,automatic_candidate,spec_files,pre-outcome candidate
+owner_type,repository_context,categorical,True,Repository owner type.,automatic_candidate,spec_files,pre-outcome candidate
+repo_stars,repository_context,numeric,True,Repository stars at collection time.,automatic_candidate,spec_files,pre-outcome candidate
+repo_forks,repository_context,numeric,True,Repository fork count at collection time.,automatic_candidate,spec_files,pre-outcome candidate
+repo_watchers,repository_context,numeric,True,Repository watcher count at collection time.,automatic_candidate,spec_files,pre-outcome candidate
+repo_subscribers_count,repository_context,numeric,True,Repository subscriber count at collection time.,automatic_candidate,spec_files,pre-outcome candidate
+repo_network_count,repository_context,numeric,True,Repository network count at collection time.,automatic_candidate,spec_files,pre-outcome candidate
+repo_open_issues,repository_context,numeric,True,Open issue count at collection time.,automatic_candidate,spec_files,pre-outcome candidate
+repo_size_kb,repository_context,numeric,True,Repository size at collection time.,automatic_candidate,spec_files,pre-outcome candidate
+repo_fork,repository_context,binary,True,Indicates whether the repository is a fork.,automatic_candidate,spec_files,pre-outcome candidate
+repo_archived,repository_context,binary,True,Indicates whether the repository was archived.,automatic_candidate,spec_files,pre-outcome candidate
+repo_disabled,repository_context,binary,True,Indicates whether the repository was disabled.,automatic_candidate,spec_files,pre-outcome candidate
+repo_is_template,repository_context,binary,True,Indicates whether the repository is a template.,automatic_candidate,spec_files,pre-outcome candidate
+repo_has_issues,repository_context,binary,True,Indicates whether repository issues are enabled.,automatic_candidate,spec_files,pre-outcome candidate
+repo_has_projects,repository_context,binary,True,Indicates whether repository projects are enabled.,automatic_candidate,spec_files,pre-outcome candidate
+repo_has_wiki,repository_context,binary,True,Indicates whether the repository wiki is enabled.,automatic_candidate,spec_files,pre-outcome candidate
+repo_has_pages,repository_context,binary,True,Indicates whether repository pages are enabled.,automatic_candidate,spec_files,pre-outcome candidate
+repo_has_downloads,repository_context,binary,True,Indicates whether repository downloads are enabled.,automatic_candidate,spec_files,pre-outcome candidate
+repo_has_discussions,repository_context,binary,True,Indicates whether repository discussions are enabled.,automatic_candidate,spec_files,pre-outcome candidate
+file_content_bytes,artifact_context,numeric,True,Stored byte size of the spec artifact.,automatic_candidate,spec_files,pre-outcome candidate
+spec_role,artifact_context,categorical,False,Lifecycle role; may encode outcome timing and is excluded by default.,automatic_candidate,spec_files,text or temporal leakage risk
+n_bytes,size,numeric,True,Byte count is a direct artifact-size measure.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_lines,size,numeric,True,Line count measures artifact length.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_words,size,numeric,True,Word count measures artifact length.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_headings,organization,numeric,True,Heading count measures document structure.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+max_heading_depth,organization,numeric,True,Heading depth measures outline hierarchy.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_code_fences,technical_detail,numeric,True,Code-fence count measures embedded examples.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_mermaid,technical_detail,numeric,True,Diagram count measures visual design content.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_tables,organization,numeric,True,Table count measures structured presentation.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_links,traceability,numeric,True,Link count is a structural traceability indicator.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_images,technical_detail,numeric,True,Image count measures included visual material.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_list_items,organization,numeric,True,List-item count measures enumerated content.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_checkboxes,planning,numeric,True,Checkbox count measures explicit task/checklist structure.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_shall,requirements,numeric,True,Normative 'shall' count is a requirement-language indicator.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_gherkin,testing,numeric,True,Gherkin-step count measures scenario-based criteria.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_scenario_blocks,testing,numeric,True,Scenario-block count measures explicit behavioral examples.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_delta_headers,change_scope,numeric,True,Delta-header count measures change specification structure.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_needs_clarification,ambiguity,numeric,True,Clarification markers indicate unresolved content.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+n_todo,ambiguity,numeric,True,TODO markers indicate unfinished specification content.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_ears,requirements,binary,True,Detects a recognized requirement syntax.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_gherkin,testing,binary,True,Detects scenario-based specification syntax.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_user_story,requirements,binary,True,Detects user-story structure.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_requirements,requirements,binary,True,Detects a requirements section.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_acceptance_criteria,testing,binary,True,Detects acceptance criteria.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_user_scenarios,testing,binary,True,Detects user-scenario content.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_non_goals,scope,binary,True,Detects explicit non-goals.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_out_of_scope,scope,binary,True,Detects explicit out-of-scope content.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_overview,organization,binary,True,Detects an overview section.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_success_criteria,testing,binary,True,Detects explicit success criteria.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_edge_cases,testing,binary,True,Detects edge-case content.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_open_questions,ambiguity,binary,True,Detects unresolved questions.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_dependencies,dependencies,binary,True,Detects dependency statements.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_purpose,organization,binary,True,Detects an explicit purpose section.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_mandatory_marker,requirements,binary,True,Detects mandatory language markers.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+is_tiny,size,binary,True,Flags very small artifacts.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_unfilled_placeholder,ambiguity,binary,True,Detects unfilled template placeholders.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+has_lorem,ambiguity,binary,True,Detects placeholder lorem ipsum content.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+lang,document_metadata,categorical,True,Detected language of the artifact.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+content_family,document_metadata,categorical,True,Parser-assigned content family.,automatic_candidate,spec_content_features,artifact structural feature; verify against target timing
+links_code,traceability,numeric,False,"Code-link count; timing may be post-outcome, excluded by default.",automatic_candidate,spec_links,traceability may be recorded after the artifact outcome
+links_pr,traceability,numeric,False,"PR-link count; directly outcome-adjacent, excluded by default.",automatic_candidate,spec_links,traceability may be recorded after the artifact outcome
+links_issue,traceability,numeric,False,"Issue-link count; potentially post-outcome, excluded by default.",automatic_candidate,spec_links,traceability may be recorded after the artifact outcome
+links_sibling,traceability,numeric,False,Sibling-document link count.,automatic_candidate,spec_links,traceability may be recorded after the artifact outcome
+links_branch,traceability,numeric,False,"Branch-link count; may be post-outcome, excluded by default.",automatic_candidate,spec_links,traceability may be recorded after the artifact outcome
+links_ref,traceability,numeric,False,Reference-link count.,automatic_candidate,spec_links,traceability may be recorded after the artifact outcome
+links_anchor,traceability,numeric,False,Anchor-link count.,automatic_candidate,spec_links,traceability may be recorded after the artifact outcome

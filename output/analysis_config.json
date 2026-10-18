@@ -1,0 +1,57 @@
+{
+  "dataset_rows": 470795,
+  "target_count": 13,
+  "spec_score_targets_present": [
+    "target_spec_completeness",
+    "target_spec_quality"
+  ],
+  "spec_score_method": "deterministic_regex_heuristic",
+  "spec_score_cache": "spec_scores_heuristic.csv",
+  "composite_target": "target_success",
+  "train_repository_fraction": 0.8,
+  "repository_grouped_split": true,
+  "random_seed": 625,
+  "max_train_rows_per_target": 50000,
+  "min_train_rows": 100,
+  "min_category_count": 20,
+  "max_missing_fraction": 0.8,
+  "max_numeric_spearman_correlation": 0.98,
+  "backward_elimination_alpha": 0.05,
+  "ridge_penalty_alpha": 1.0,
+  "success_min_groups": 2,
+  "aggregate_targets": [
+    "target_pr_closed_merge_proportion",
+    "target_avg_pr_merge_hours",
+    "target_all_tasks_completion_proportion_avg",
+    "target_code_refs_task_done_proportion_avg"
+  ],
+  "additional_targets_excluded_from_aggregate": [
+    "target_pr_any_merged",
+    "target_all_tasks_done_count",
+    "target_all_tasks_remaining_count",
+    "target_all_tasks_done_incomplete_ratio_avg",
+    "target_tasks_md_done_count",
+    "target_tasks_md_remaining_count",
+    "target_tasks_md_done_incomplete_ratio_avg"
+  ],
+  "heuristic_score_model_input_exclusion": [
+    "file_content_bytes",
+    "n_bytes",
+    "n_lines",
+    "n_words",
+    "n_headings",
+    "n_list_items",
+    "n_checkboxes",
+    "n_code_fences",
+    "n_shall",
+    "n_gherkin",
+    "has_ears",
+    "has_gherkin",
+    "has_requirements",
+    "has_acceptance_criteria",
+    "has_user_scenarios",
+    "has_edge_cases",
+    "has_mandatory_marker",
+    "is_tiny"
+  ]
+}

@@ -1,0 +1,6 @@
+PyMySQL>=1.1,<2
+numpy>=2.2
+pandas>=2.2
+scipy>=1.15
+statsmodels>=0.14
+matplotlib>=3.9

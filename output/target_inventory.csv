@@ -1,0 +1,14 @@
+target,target_group,description,source,formula,composite_weight,included_in_target_success,scoring_method
+target_pr_closed_merge_proportion,pr_merging,Closed PR merge proportion,pull_requests + pr_files,Derived in extract.sql; see METHODOLOGY.md,equal across four outcome groups,True,
+target_avg_pr_merge_hours,pr_merge_time,Average PR creation-to-merge hours,pull_requests + pr_files,Derived in extract.sql; see METHODOLOGY.md,equal across four outcome groups,True,
+target_all_tasks_completion_proportion_avg,all_openspec_tasks,Average all-artifact task completion proportion,openspec_artifact_files,Derived in extract.sql; see METHODOLOGY.md,equal across four outcome groups,True,
+target_code_refs_task_done_proportion_avg,code_ref_task_completion,Average code-reference task completion proportion,openspec_code_refs,Derived in extract.sql; see METHODOLOGY.md,equal across four outcome groups,True,
+target_pr_any_merged,pr_merging,Any associated PR merged,pull_requests + pr_files,Derived in extract.sql; see METHODOLOGY.md,excluded from target_success,False,
+target_all_tasks_done_count,all_openspec_tasks,Completed task count across artifacts,openspec_artifact_files,Derived in extract.sql; see METHODOLOGY.md,excluded from target_success,False,
+target_all_tasks_remaining_count,all_openspec_tasks,Remaining task count across artifacts,openspec_artifact_files,Derived in extract.sql; see METHODOLOGY.md,excluded from target_success,False,
+target_all_tasks_done_incomplete_ratio_avg,all_openspec_tasks,Average completed-to-incomplete task ratio,openspec_artifact_files,Derived in extract.sql; see METHODOLOGY.md,excluded from target_success,False,
+target_tasks_md_done_count,tasks_md,Completed tasks.md task count,openspec_artifact_files,Derived in extract.sql; see METHODOLOGY.md,excluded from target_success,False,
+target_tasks_md_remaining_count,tasks_md,Remaining tasks.md task count,openspec_artifact_files,Derived in extract.sql; see METHODOLOGY.md,excluded from target_success,False,
+target_tasks_md_done_incomplete_ratio_avg,tasks_md,Average tasks.md completed-to-incomplete task ratio,openspec_artifact_files,Derived in extract.sql; see METHODOLOGY.md,excluded from target_success,False,
+target_spec_completeness,spec_rubric_assessment,Spec completeness rubric score (0-5),specmine-zenodo/specs.jsonl/specs.jsonl + deterministic_regex_heuristic,LLM or deterministic rubric score from 0 to 5,excluded from target_success,False,deterministic_regex_heuristic
+target_spec_quality,spec_rubric_assessment,Spec quality rubric score (0-5),specmine-zenodo/specs.jsonl/specs.jsonl + deterministic_regex_heuristic,LLM or deterministic rubric score from 0 to 5,excluded from target_success,False,deterministic_regex_heuristic
