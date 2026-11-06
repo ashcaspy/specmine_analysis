@@ -20,7 +20,16 @@ from pathlib import Path
 from typing import Any
 
 BASE_DIR = Path(__file__).resolve().parent
-WORKSPACE_ROOT = BASE_DIR.parent
+
+
+def resolve_workspace_root() -> Path:
+    for candidate in (BASE_DIR, BASE_DIR.parent, BASE_DIR.parent.parent):
+        if (candidate / "specmine-zenodo").exists():
+            return candidate
+    return BASE_DIR.parent.parent
+
+
+WORKSPACE_ROOT = resolve_workspace_root()
 OUTPUT_DIR = BASE_DIR / "output"
 IMAGE_DIR = OUTPUT_DIR / "images"
 INPUTS_PATH = BASE_DIR / "input_candidates.csv"

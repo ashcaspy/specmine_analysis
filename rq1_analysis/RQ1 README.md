@@ -37,14 +37,14 @@ to outputs.
 From the workspace root:
 
 ```powershell
-.\.venv\Scripts\python.exe .\specmine_analysis\run_analysis.py extract
-.\.venv\Scripts\python.exe .\specmine_analysis\run_analysis.py model
+.\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py extract
+.\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py model
 ```
 
 To refresh extraction and run the models in one command:
 
 ```powershell
-.\.venv\Scripts\python.exe .\specmine_analysis\run_analysis.py all
+.\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py all
 ```
 
 The separate target outcomes include PR and OpenSpec measures described in
@@ -61,8 +61,8 @@ summaries in `output/spec_scores.csv`. Scores join the extracted data by
 `file_url_sha16`. To use a local model:
 
 ```powershell
-.\.venv\Scripts\python.exe .\specmine_analysis\run_analysis.py spec-scores --llm-model <local-model>
-.\.venv\Scripts\python.exe .\specmine_analysis\run_analysis.py model
+.\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py spec-scores --llm-model <local-model>
+.\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py model
 ```
 
 The endpoint defaults to loopback Ollama and must remain on the local machine.
@@ -75,9 +75,9 @@ Until a local model is available, deterministic regex heuristics can score the
 corpus without network access:
 
 ```powershell
-.\.venv\Scripts\python.exe .\specmine_analysis\run_analysis.py spec-scores-heuristic --spec-score-limit 100
-.\.venv\Scripts\python.exe .\specmine_analysis\run_analysis.py spec-scores-heuristic
-.\.venv\Scripts\python.exe .\specmine_analysis\run_analysis.py model
+.\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py spec-scores-heuristic --spec-score-limit 100
+.\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py spec-scores-heuristic
+.\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py model
 ```
 
 The heuristic scores are transparent proxies, not LLM judgments or validated
@@ -92,7 +92,7 @@ with `--run-spec-scores --llm-model <local-model>`.
 ## Validation
 
 ```powershell
-.\.venv\Scripts\python.exe .\specmine_analysis\run_analysis.py self-test
+.\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py self-test
 ```
 
 The synthetic-data check exercises composite-target isolation, restored

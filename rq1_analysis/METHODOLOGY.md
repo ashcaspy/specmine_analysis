@@ -205,9 +205,9 @@ heuristic-rule exclusions, or other target-specific omissions.
 The CLI supports `--max-train-rows`, `--min-train-rows`,
 `--min-category-count`, `--max-missing-fraction`, `--max-correlation`,
 `--success-min-groups`, `--alpha`, `--spec-score-limit`, and the local-score
-model/endpoint/timeout arguments. See `README.md` for commands.
+model/endpoint/timeout arguments. See `RQ1 README.md` for commands.
 
-Run `python .\\specmine_analysis\\run_analysis.py self-test` for synthetic
+Run `python .\\specmine_analysis\\rq1_analysis\\run_analysis.py self-test` for synthetic
 validation of composite isolation, model families, heuristic leakage
 exclusions, reporting, score-cache behavior, and plots without connecting to
 MySQL.
