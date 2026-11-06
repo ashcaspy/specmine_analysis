@@ -183,6 +183,7 @@ selection history.
 | File | Contents |
 |---|---|
 | `output/modeling_dataset.csv` | Extracted candidate inputs, outcomes, PR trial counts, and task metrics. |
+| `output/modeling_dataset_sub.csv` | All specification rows with only the hash and the two rubric scores used by RQ2. |
 | `output/spec_scores.csv` | Optional versioned local-LLM rubric cache, source digest, and evidence. |
 | `output/spec_scores_heuristic.csv` | Optional heuristic rubric cache, source digest, and rule evidence. |
 | `output/spec_score_source.json` | Active rubric-scoring method and cache provenance. |

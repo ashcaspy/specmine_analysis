@@ -36,6 +36,11 @@ INPUTS_PATH = BASE_DIR / "input_candidates.csv"
 SPEC_SCORE_PROMPT_VERSION = "specmine-spec-rubric-v1"
 HEURISTIC_SCORE_VERSION = "specmine-spec-heuristics-v1"
 SPEC_SCORE_CHUNK_CHARS = 8000
+RQ2_DATASET_COLUMNS = (
+    "file_url_sha16",
+    "target_spec_completeness",
+    "target_spec_quality",
+)
 SEED = 625
 RIDGE_ALPHA = 1.0
 
@@ -333,8 +338,105 @@ def extract_dataset() -> Path:
         connection.close()
     temporary_path.replace(output_path)
     (OUTPUT_DIR / "spec_score_source.json").unlink(missing_ok=True)
+    (OUTPUT_DIR / "modeling_dataset_sub.csv").unlink(missing_ok=True)
     print(f"Extracted {count:,} specs into {output_path}")
     return output_path
+
+
+def write_rq2_dataset(dataset_path: Path, *, required: bool = False) -> Path | None:
+    subset_path = dataset_path.with_name("modeling_dataset_sub.csv")
+    temporary_path = subset_path.with_suffix(".csv.tmp")
+    score_columns = set(RQ2_DATASET_COLUMNS[1:])
+
+    try:
+        with dataset_path.open(encoding="utf-8-sig", newline="") as source:
+            reader = csv.DictReader(source)
+            fieldnames = reader.fieldnames or []
+            missing = set(RQ2_DATASET_COLUMNS) - set(fieldnames)
+            score_values: dict[str, tuple[str, str]] | None = None
+            if missing:
+                cache_path = None
+                score_source_path = OUTPUT_DIR / "spec_score_source.json"
+                if score_source_path.is_file():
+                    score_source = json.loads(
+                        score_source_path.read_text(encoding="utf-8")
+                    )
+                    cache_name = score_source.get("cache_file")
+                    if isinstance(cache_name, str) and Path(cache_name).name == cache_name:
+                        cache_path = OUTPUT_DIR / cache_name
+                    if cache_path is not None and not cache_path.is_file():
+                        raise AnalysisError(
+                            f"Rubric score cache is missing: {cache_path}"
+                        )
+                else:
+                    candidates = [
+                        OUTPUT_DIR / name
+                        for name in ("spec_scores.csv", "spec_scores_heuristic.csv")
+                        if (OUTPUT_DIR / name).is_file()
+                    ]
+                    if len(candidates) > 1:
+                        raise AnalysisError(
+                            "Multiple rubric score caches exist but "
+                            "spec_score_source.json is missing."
+                        )
+                    if candidates:
+                        cache_path = candidates[0]
+
+                if cache_path is None:
+                    if required:
+                        raise AnalysisError(
+                            "Rubric scores are unavailable; run a spec-scores phase "
+                            "before creating modeling_dataset_sub.csv."
+                        )
+                    return None
+
+                score_values = {}
+                with cache_path.open(encoding="utf-8-sig", newline="") as cache:
+                    cache_reader = csv.DictReader(cache)
+                    cache_missing = set(RQ2_DATASET_COLUMNS) - set(
+                        cache_reader.fieldnames or []
+                    )
+                    if cache_missing:
+                        raise AnalysisError(
+                            f"Rubric score cache {cache_path} is missing columns: "
+                            f"{sorted(cache_missing)}"
+                        )
+                    for row in cache_reader:
+                        file_id = row.get("file_url_sha16", "")
+                        if file_id:
+                            score_values[file_id] = (
+                                row.get("target_spec_completeness", ""),
+                                row.get("target_spec_quality", ""),
+                            )
+
+            if missing - score_columns:
+                raise AnalysisError(
+                    f"Modeling dataset is missing required RQ2 columns: "
+                    f"{sorted(missing - score_columns)}"
+                )
+
+            with temporary_path.open("w", encoding="utf-8", newline="") as output:
+                writer = csv.writer(output)
+                writer.writerow(RQ2_DATASET_COLUMNS)
+                row_count = 0
+                for row in reader:
+                    file_id = row.get("file_url_sha16", "")
+                    if score_values is None:
+                        scores = (
+                            row.get("target_spec_completeness", ""),
+                            row.get("target_spec_quality", ""),
+                        )
+                    else:
+                        scores = score_values.get(file_id, ("", ""))
+                    writer.writerow((file_id, *scores))
+                    row_count += 1
+    except Exception:
+        temporary_path.unlink(missing_ok=True)
+        raise
+
+    temporary_path.replace(subset_path)
+    print(f"Wrote {row_count:,} RQ2 rows to {subset_path}")
+    return subset_path
 
 
 def call_local_llm_json(
@@ -653,6 +755,7 @@ def run_heuristic_spec_scores(args: argparse.Namespace) -> Path:
         validate="one_to_one",
     )
     merged.to_csv(dataset_path, index=False)
+    write_rq2_dataset(dataset_path, required=True)
     write_spec_score_source("deterministic_regex_heuristic", cache_path)
     print(
         f"Heuristically scored {processed:,} new specs; cached scores for "
@@ -897,6 +1000,7 @@ def run_spec_scores(args: argparse.Namespace) -> Path:
         validate="one_to_one",
     )
     merged.to_csv(dataset_path, index=False)
+    write_rq2_dataset(dataset_path, required=True)
     write_spec_score_source("local_llm", cache_path)
     print(
         f"Scored {processed:,} new specs; cached scores for "
@@ -1922,6 +2026,7 @@ def model_and_report(args: argparse.Namespace) -> None:
     dataset_path = OUTPUT_DIR / "modeling_dataset.csv"
     if not dataset_path.exists():
         raise AnalysisError("Modeling dataset missing; run the extract phase first.")
+    write_rq2_dataset(dataset_path)
     manifest = read_manifest()
     frame = pd.read_csv(
         dataset_path,
@@ -2693,6 +2798,14 @@ def self_test() -> None:
             cached_scores = pd.read_csv(OUTPUT_DIR / "spec_scores.csv")
             if len(cached_scores) != 2:
                 raise AnalysisError("Spec-score cache contains duplicate or missing test records.")
+            rq2_dataset = pd.read_csv(
+                OUTPUT_DIR / "modeling_dataset_sub.csv",
+                dtype={"file_url_sha16": str},
+            )
+            if list(rq2_dataset.columns) != list(RQ2_DATASET_COLUMNS) or len(rq2_dataset) != 2:
+                raise AnalysisError(
+                    "RQ2 subset must retain both scored test rows and only its required columns."
+                )
     finally:
         WORKSPACE_ROOT = old_workspace_root
         call_local_llm_json = old_llm_json_call

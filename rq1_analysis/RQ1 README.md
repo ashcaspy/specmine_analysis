@@ -102,6 +102,8 @@ and plots without connecting to MySQL.
 ## Outputs
 
 - `output/modeling_dataset.csv`
+- `output/modeling_dataset_sub.csv` — the RQ2-ready subset containing all rows
+  and only the specification hash, completeness score, and quality score.
 - `output/spec_scores.csv` and `output/spec_scores_heuristic.csv` when scored
 - `output/target_model_results.csv`
 - `output/target_inventory.csv`
@@ -116,3 +118,8 @@ and plots without connecting to MySQL.
 
 Initial input filters, target-specific leakage exclusions, and backward
 elimination decisions are reported in the result tables.
+
+After rubric scoring, the runner writes `modeling_dataset_sub.csv` for
+`rq2_analysis/SpecMine RQ2.ipynb`. This compact file retains every specification
+row and contains only the ID and two rubric score columns; it does not replace
+the full `modeling_dataset.csv`.
