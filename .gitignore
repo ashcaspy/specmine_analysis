@@ -1,3 +1,4 @@
 rq1_analysis/output/modeling_dataset.csv
 rq1_analysis/output/predictions.csv
 rq1_analysis/output/spec_scores_heuristic.csv
+__pycache__/
