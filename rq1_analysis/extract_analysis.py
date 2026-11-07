@@ -5,12 +5,12 @@ from __future__ import annotations
 from analysis_utils import (
     AnalysisError,
     BASE_DIR,
+    DATASET_ROOT,
     HEURISTIC_SCORE_VERSION,
     OUTPUT_DIR,
     Path,
     SPEC_SCORE_PROMPT_VERSION,
     SPEC_SCORE_TARGETS,
-    WORKSPACE_ROOT,
     argparse,
     build_feature_select,
     connect_db,
@@ -66,7 +66,7 @@ def extract_dataset() -> Path:
 def run_heuristic_spec_scores(args: argparse.Namespace) -> Path:
     import pandas as pd
 
-    source_path = WORKSPACE_ROOT / "specmine-zenodo" / "specs.jsonl" / "specs.jsonl"
+    source_path = DATASET_ROOT / "specs.jsonl" / "specs.jsonl"
     dataset_path = OUTPUT_DIR / "modeling_dataset.csv"
     cache_path = OUTPUT_DIR / "spec_scores_heuristic.csv"
     if not source_path.exists():
@@ -180,7 +180,7 @@ def run_spec_scores(args: argparse.Namespace) -> Path:
     endpoint = args.llm_endpoint or os.getenv(
         "LLM_BASE_URL", "http://127.0.0.1:11434/v1/chat/completions"
     )
-    source_path = WORKSPACE_ROOT / "specmine-zenodo" / "specs.jsonl" / "specs.jsonl"
+    source_path = DATASET_ROOT / "specs.jsonl" / "specs.jsonl"
     dataset_path = OUTPUT_DIR / "modeling_dataset.csv"
     if not source_path.exists():
         raise AnalysisError(f"Spec text source is missing: {source_path}")

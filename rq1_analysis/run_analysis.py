@@ -174,6 +174,8 @@ def main() -> int:
             extract_dataset()
             if args.run_spec_scores:
                 run_spec_scores(args)
+            else:
+                run_heuristic_spec_scores(args)
             create_target_inventory()
             model_and_report(args)
         elif args.phase == "self-test":

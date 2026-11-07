@@ -28,6 +28,10 @@ def resolve_workspace_root() -> Path:
 
 WORKSPACE_ROOT = resolve_workspace_root()
 
+DATASET_ROOT = Path(
+    os.getenv("SPECMINE_DATASET_ROOT", WORKSPACE_ROOT / "specmine-zenodo")
+).expanduser().resolve()
+
 OUTPUT_DIR = BASE_DIR / "output"
 
 IMAGE_DIR = OUTPUT_DIR / "images"
