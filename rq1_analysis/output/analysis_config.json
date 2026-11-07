@@ -1,9 +1,12 @@
 {
   "dataset_rows": 470795,
-  "target_count": 11,
-  "spec_score_targets_present": [],
-  "spec_score_method": "unspecified",
-  "spec_score_cache": "",
+  "target_count": 13,
+  "spec_score_targets_present": [
+    "target_spec_completeness",
+    "target_spec_quality"
+  ],
+  "spec_score_method": "deterministic_regex_heuristic",
+  "spec_score_cache": "spec_scores_heuristic.csv",
   "composite_target": "target_success",
   "train_repository_fraction": 0.8,
   "repository_grouped_split": true,
