@@ -1,0 +1,8 @@
+{
+  "method": "deterministic_regex_heuristic",
+  "cache_file": "spec_scores_heuristic.csv",
+  "targets": [
+    "target_spec_completeness",
+    "target_spec_quality"
+  ]
+}

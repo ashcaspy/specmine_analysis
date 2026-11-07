@@ -445,6 +445,7 @@ def group_p_value(result: Any, columns: list[str]) -> float:
     if not columns:
         return math.nan
     import numpy as np
+    from statsmodels.tools.sm_exceptions import ValueWarning
 
     names = list(result.model.exog_names)
     positions = [names.index(name) for name in columns if name in names]
@@ -454,7 +455,13 @@ def group_p_value(result: Any, columns: list[str]) -> float:
     for row, position in enumerate(positions):
         contrast[row, position] = 1.0
     try:
-        test = result.wald_test(contrast, scalar=True)
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore",
+                message=r"covariance of constraints does not have full rank.*",
+                category=ValueWarning,
+            )
+            test = result.wald_test(contrast, scalar=True)
         value = float(np.asarray(test.pvalue).squeeze())
         return value
     except (ValueError, np.linalg.LinAlgError):
