@@ -1,4 +1,4 @@
-# SpecMine Analysis Walkthrough
+# SpecMine Analysis
 
 This project runs three analysis stages in order:
 
@@ -92,7 +92,7 @@ Set-Location $analysisRepository
 Regeneration replaces the sample-order file; it is not needed when using the
 provided sample and completed workbook.
 
-## 3. RQ1: extraction and heuristic scoring
+## 3. RQ1: extraction, heuristic scoring, and regression modeling
 
 RQ1 needs the populated MySQL database, the expanded JSONL spec-text file, and
 the Python dependencies above. Run extraction, heuristic scoring, and
