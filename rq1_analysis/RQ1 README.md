@@ -32,6 +32,15 @@ and `MYSQL_DATABASE` from the process environment or the workspace-root `.env`
 file. The default database is `ssw625`. Database credentials are never written
 to outputs.
 
+The specification text source defaults to the sibling
+`specmine-zenodo/specs.jsonl/specs.jsonl` file. To store the dataset elsewhere,
+set `SPECMINE_DATASET_ROOT` to the extracted dataset directory in the process
+environment before running any scoring phase. For example, in PowerShell:
+
+```powershell
+$env:SPECMINE_DATASET_ROOT = "D:\datasets\specmine-zenodo"
+```
+
 ## Run
 
 From the workspace root:
@@ -41,7 +50,8 @@ From the workspace root:
 .\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py model
 ```
 
-To refresh extraction and run the models in one command:
+To extract the data, calculate heuristic rubric scores, and run the models in
+one command:
 
 ```powershell
 .\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py all
@@ -55,10 +65,10 @@ are modeled independently and excluded from that composite.
 ## Specification rubric scores
 
 The `spec-scores` phase reads the complete Markdown `content` field from
-`specmine-zenodo/specs.jsonl/specs.jsonl`, scores completeness and quality from
-0 to 5 using a local OpenAI-compatible LLM endpoint, and caches evidence
-summaries in `output/spec_scores.csv`. Scores join the extracted data by
-`file_url_sha16`. To use a local model:
+`specs.jsonl/specs.jsonl` under the configured dataset root, scores
+completeness and quality from 0 to 5 using a local OpenAI-compatible LLM
+endpoint, and caches evidence summaries in `output/spec_scores.csv`. Scores
+join the extracted data by `file_url_sha16`. To use a local model:
 
 ```powershell
 .\.venv\Scripts\python.exe .\specmine_analysis\rq1_analysis\run_analysis.py spec-scores --llm-model <local-model>
@@ -86,8 +96,10 @@ and `file_content_bytes` inputs are excluded from those two models because
 their meanings overlap directly with the heuristic scoring rules. Their
 target-specific exclusion reasons appear in `feature_results.csv`.
 
-The `all` command does not score rubric outcomes unless explicitly requested
-with `--run-spec-scores --llm-model <local-model>`.
+By default, `all` runs the deterministic heuristic scoring phase between
+extraction and modeling. To use the optional local LLM scoring instead, pass
+`--run-spec-scores --llm-model <local-model>`; this selects LLM scoring in
+place of heuristic scoring for that run.
 
 ## Validation
 
