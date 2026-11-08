@@ -1,0 +1,88 @@
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\definecolor{navy}{HTML}{213A5B}
+\definecolor{blue}{HTML}{3977A8}
+\definecolor{teal}{HTML}{27826F}
+\definecolor{red}{HTML}{B94A55}
+\definecolor{violet}{HTML}{7656A5}
+\definecolor{gray}{HTML}{586A7A}
+\definecolor{paleBlue}{HTML}{EAF2F8}
+\definecolor{paleTeal}{HTML}{E9F4F0}
+\definecolor{paleRed}{HTML}{F9ECEC}
+\definecolor{paleViolet}{HTML}{F1ECF8}
+\tikzset{
+  panel/.style={draw=navy!35,fill=white,rounded corners=2mm,thick},
+  data/.style={draw=blue!75!black,fill=paleBlue,rounded corners=1.5mm,thick,
+    align=center,text width=3.3cm,minimum height=1.0cm,inner sep=5pt,font=\scriptsize},
+  ai/.style={draw=blue!80!black,fill=paleBlue,rounded corners=1.5mm,thick,
+    align=left,text width=4.0cm,minimum height=1.3cm,inner sep=6pt,font=\scriptsize},
+  human/.style={draw=red!80!black,fill=paleRed,rounded corners=1.5mm,thick,
+    align=left,text width=4.0cm,minimum height=1.3cm,inner sep=6pt,font=\scriptsize},
+  flow/.style={-{Stealth[length=2.2mm]},draw=navy,line width=.9pt},
+  aiflow/.style={flow,draw=blue!80!black},
+  humanflow/.style={flow,draw=red!80!black}
+}
+\begin{tikzpicture}[font=\sffamily]
+
+  \node[data] (source) at (-4.15,6.3) {
+    \textbf{Public commit history}\\
+    \texttt{spec\_file\_commits}\\
+    Training split only
+  };
+  \node[data] (normalize) at (-4.17,4.5) {
+    \textbf{Normalize accounts}\\
+    Lowercase author /\\committer\\
+    Preserve \texttt{author\_type}
+  };
+  \draw[flow] (source) -- (normalize);
+
+  \node[ai] (aiRule) at (-1.7,2.53) {
+    \textbf{\textcolor{blue!80!black}{AI evidence}}\\
+    \texttt{author\_login} $\in$ \texttt{HIGH\_CONF\_AI}\\
+    \textbf{OR}\\
+    \texttt{committer\_login} $\in$ \texttt{HIGH\_CONF\_AI}
+  };
+  \node[human] (humanRule) at (-6.6,2.53) {
+    \textbf{\textcolor{red!80!black}{Human evidence}}\\
+    \texttt{author\_type = user}\\
+    AND nonempty \texttt{author\_login}\\
+    AND login $\notin$ \texttt{HIGH\_CONF\_AI}
+  };
+  \draw[aiflow] (normalize.east) -- ++(0.61,0) -- (aiRule.north);
+  \draw[humanflow] (normalize.west) -- (-6.6,4.5) -- (humanRule);
+
+  \node[data,draw=teal!80!black,fill=paleTeal] (aggregate) at (-4.1,0.7) {
+    \textbf{Group by spec ID}\\
+    $A=\max(\mathrm{AI\ evidence})$\\
+    $H=\max(\mathrm{human\ evidence})$
+  };
+  \draw[aiflow] (aiRule.south) -- ++(0,-1.05) -- (aggregate.east);
+  \draw[humanflow] (humanRule.south) -- ++(0,-1.05) -- (aggregate.west);
+
+  \node[panel,minimum width=175pt,minimum height=76pt,anchor=north west] (truth) at (-7.2,-0.29) {};
+    \draw[flow] (aggregate.south) -- (truth.north);
+\node[font=\bfseries\scriptsize] at (-6.05,-0.69) {$A$};
+  \node[font=\bfseries\scriptsize] at (-4.85,-0.69) {$H$};
+  \node[anchor=west,font=\bfseries\scriptsize] at (-4.15,-0.69) {Per-spec label};
+  \draw[gray!45] (-6.85,-0.9) -- (-1.35,-0.9);
+  \node[font=\scriptsize] at (-6.05,-1.2) {1};
+  \node[font=\scriptsize] at (-4.85,-1.2) {1};
+  \node[font=\bfseries\scriptsize,text=violet] at (-3.15,-1.2) {Collaborative};
+  \node[font=\scriptsize] at (-6.05,-1.7) {1};
+  \node[font=\scriptsize] at (-4.85,-1.7) {0};
+  \node[font=\bfseries\scriptsize,text=blue] at (-3.15,-1.7) {AI-written};
+  \node[font=\scriptsize] at (-6.05,-2.2) {0};
+  \node[font=\scriptsize] at (-4.85,-2.2) {1};
+  \node[font=\bfseries\scriptsize,text=red] at (-3.15,-2.2) {Human-written};
+  \node[font=\scriptsize] at (-6.05,-2.7) {0};
+  \node[font=\scriptsize] at (-4.85,-2.7) {0};
+  \node[font=\bfseries\scriptsize,text=gray] at (-3.15,-2.7) {Unknown};
+  \draw[gray!30] (-6.85,-1.4) -- (-1.35,-1.4);
+  \draw[gray!30] (-6.85,-1.9) -- (-1.35,-1.9);
+  \draw[gray!30] (-6.85,-2.4) -- (-1.35,-2.4);
+
+  \node[data,text width=4.2cm] (result) at (-4.11,-3.95) {
+    \textbf{Output}\\
+    One label per \texttt{file\_url\_sha16}
+  };
+  \draw[flow] (truth.south) -- (result.north);
+\end{tikzpicture}
