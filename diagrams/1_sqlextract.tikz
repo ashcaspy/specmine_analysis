@@ -1,0 +1,199 @@
+\usetikzlibrary{arrows.meta,positioning,shapes.multipart,calc}
+\definecolor{navy}{HTML}{213A5B}
+\definecolor{blue}{HTML}{3977A8}
+\definecolor{teal}{HTML}{27826F}
+\definecolor{gold}{HTML}{C88B2D}
+\definecolor{violet}{HTML}{7656A5}
+\definecolor{paleBlue}{HTML}{EAF2F8}
+\definecolor{paleTeal}{HTML}{E9F4F0}
+\definecolor{paleGold}{HTML}{FBF3E4}
+\definecolor{paleViolet}{HTML}{F1ECF8}
+\tikzset{
+  table/.style={
+    rectangle split,rectangle split parts=2,rectangle split part align={left,left},
+    draw=blue!75!black,fill=paleBlue,rounded corners=1mm,line width=.8pt,
+    text width=3.25cm,inner sep=4pt,font=\scriptsize,anchor=center
+  },
+  derived/.style={
+    table,draw=teal!80!black,fill=paleTeal,dashed
+  },
+  config/.style={
+    table,draw=gold!85!black,fill=paleGold
+  },
+  result/.style={
+    table,draw=violet!80!black,fill=paleViolet,line width=1.1pt,
+    text width=3.5cm
+  },
+  relation/.style={draw=navy,line width=.8pt},
+  transform/.style={-{Stealth[length=2mm]},draw=teal!80!black,line width=.85pt},
+  join/.style={-{Stealth[length=2mm]},draw=violet!80!black,line width=.9pt},
+  cardinality/.style={font=\tiny,fill=white,inner sep=1pt,text=navy,align=center},
+  note/.style={font=\scriptsize,text=navy,align=center}
+}
+\begin{tikzpicture}[font=\sffamily]
+
+  % Canonical spec row and direct feature relations
+  \node[table] (spec) at (-9.8,2.4) {
+    \textbf{\textcolor{blue!75!black}{spec\_files}}
+    \nodepart{second}
+    \textbf{PK} file\_url\_sha16\\
+    repo\_name \quad file\_path\\
+    spec / repository metadata
+  };
+  \node[table] (content) at (-4.4,6.2) {
+    \textbf{\textcolor{blue!75!black}{spec\_content\_features}}
+    \nodepart{second}
+    \textbf{PK, FK} file\_url\_sha16\\
+    precomputed content predictors
+  };
+  \node[table] (links) at (-4.4,3.8) {
+    \textbf{\textcolor{blue!75!black}{spec\_links}}
+    \nodepart{second}
+    \textbf{FK} spec\_url\_sha16\\
+    rel: code / PR / issue / sibling\\
+    branch / ref / anchor
+  };
+  \node[derived] (linkagg) at (1.0,3.8) {
+    \textbf{link\_features}
+    \nodepart{second}
+    \textbf{PK} spec\_url\_sha16\\
+    GROUP BY spec\_url\_sha16\\
+    count by relation type
+  };
+  \node[config] (manifest) at (-9.8,-0.45) {
+    \textbf{input\_candidates.csv}
+    \nodepart{second}
+    selected = True; exclude leakage risk\\
+    validate selected columns\\
+    inject \texttt{\{FEATURE\_SELECT\}}
+  };
+
+  % Pull-request relational branch
+  \node[table] (prfiles) at (-4.4,1.15) {
+    \textbf{\textcolor{blue!75!black}{pr\_files}}
+    \nodepart{second}
+    repo\_name\\file\_path\\
+    tool\\pr\_number
+  };
+  \node[table] (prs) at (1,1.15) {
+    \textbf{\textcolor{blue!75!black}{pull\_requests}}
+    \nodepart{second}
+    tool\\repo\_name\\pr\_number\\
+    state\\is\_merged\\
+    created\_at\\merged\_at
+  };
+  \node[derived] (matched) at (5.7,1.15) {
+    \textbf{matched\_prs}
+    \nodepart{second}
+    \textbf{PK grain} spec ID + tool\\
+    + repo + PR number\\
+    deduplicate; MAX status / dates
+  };
+  \node[derived] (pragg) at (10.2,1.15) {
+    \textbf{pr\_features}
+    \nodepart{second}
+    \textbf{PK} file\_url\_sha16\\
+    GROUP BY spec ID\\
+    associated / closed / merged\\
+    merge proportion + hours
+  };
+
+  % OpenSpec artifact and code-reference branch
+  \node[table] (artifacts) at (-4.4,-1.85) {
+    \textbf{\textcolor{blue!75!black}{openspec\_artifact\_files}}
+    \nodepart{second}
+    repo\_name\\file\_path\\kind\\
+    n\_tasks\\n\_tasks\_done\\
+    paths under \texttt{/changes/}
+  };
+  \node[derived] (scope) at (1,-1.85) {
+    \textbf{artifact\_scope}
+    \nodepart{second}
+    repo + artifact path + kind\\
+    task counts + change\_root\\
+    archive paths retain change dir
+  };
+  \node[table] (refs) at (-4.4,-4.75) {
+    \textbf{\textcolor{blue!75!black}{openspec\_code\_refs}}
+    \nodepart{second}
+    repo\_name \quad artifact\_path\\
+    id \quad task\_done
+  };
+  \node[derived] (refagg) at (1,-4.75) {
+    \textbf{refs\_by\_artifact}
+    \nodepart{second}
+    \textbf{PK grain} repo + artifact path\\
+    GROUP BY both keys\\
+    distinct refs with status / done
+  };
+  \node[derived] (metrics) at (5.7,-1.85) {
+    \textbf{artifact\_metrics}
+    \nodepart{second}
+    task remaining + completion\\
+    done : incomplete ratio\\
+    code-ref task-done proportion
+  };
+  \node[derived] (osagg) at (10.2,-1.85) {
+    \textbf{openspec\_features}
+    \nodepart{second}
+    \textbf{PK} file\_url\_sha16\\
+    GROUP BY spec ID\\
+    all-artifact + tasks.md targets
+  };
+
+  % Final query result; key and grain are explicit
+  \node[result] (output) at (10.2,5.6) {
+    \textbf{RQ1 extraction row}
+    \nodepart{second}
+    \textbf{PK} file\_url\_sha16 \quad repo\_name\\
+    selected \texttt{\{FEATURE\_SELECT\}}\\
+    PR + OpenSpec target metrics\\
+    \textbf{grain: one row per spec}
+  };
+
+  % Source relationships: labels are kept off the table bodies.
+  \draw[relation] (-8.03,2.63) -- ++(0.36,0.01) |- (content.west)
+    node[pos=.42,cardinality,right]{1 : 0..1};
+  \draw[relation] (spec.east) -- ++(0.52,0) |- (links.west)
+    node[pos=.42,cardinality,right]{1 : 0..*};
+  \draw[relation] (-8.03,2.15) -- ++(0.51,0) |- (prfiles.west)
+    node[pos=.42,cardinality,right]{repo +\\exact path};
+  \draw[relation] (-8.03,1.94) -- ++(0.33,0) |- (artifacts.west)
+    node[pos=0.465695,cardinality,right]{repo +\\change root};
+
+  \draw[relation] (prfiles.east) -- (prs.west)
+    node[midway,cardinality,above]{tool + repo +\\PR number};
+  \draw[transform] (prs.east) -- (matched.west);
+  \draw[transform] (matched.east) -- (pragg.west);
+  \draw[transform] (links.east) -- (linkagg.west);
+
+  \draw[transform] (artifacts.east) -- (scope.west);
+  \draw[relation] (refs.east) -- (refagg.west)
+    node[midway,cardinality,above]{repo +\\artifact path};
+  \draw[relation] (scope.east) -- (metrics.west)
+    node[midway,cardinality,above]{one row\\per artifact};
+  \draw[relation] (refagg.east) -- ++(2.92,0) |- (metrics.south)
+    node[pos=0.33246,cardinality,right]{repo +\\artifact path};
+  \draw[transform] (metrics.east) -- (osagg.west);
+
+  % Final left joins; the source-to-output joins all use the spec key.
+  \draw[join] (spec.north) -- ++(0,0.77) -- ++(0,3.11) -| (output.north)
+    node[pos=.90,cardinality,above]{FROM: one row per spec};
+  \draw[join] (content.east) -- ++(.6,0) |- (output.west)
+    node[pos=.79,cardinality,above]{LEFT JOIN on spec ID};
+  \draw[join] (linkagg.east) -- ++(2.22,0) |- (output.south west)
+    node[pos=.55,cardinality,below]{LEFT JOIN;\\no selected fields};
+  \draw[join] (pragg.north) -- ++(0,1.0) -| (output.south)
+    node[pos=.77,cardinality,right]{LEFT JOIN\\on spec ID};
+  \draw[join] (osagg.east) -- ++(0.68,0.01) -- ++(0,7.24) -| (output.east)
+    node[pos=0.339077,cardinality,right]{LEFT JOIN\\on spec ID};
+
+  \node[note,anchor=west] at (-9.8,-6.3) {
+    \textbf{Manifest projection:} selected, validated candidate columns populate \texttt{\{FEATURE\_SELECT\}}.
+    Link counts are joined but not selected by the current manifest.
+  };
+  \node[note,anchor=west,text width=22cm,align=left] at (-9.8,-6.95) {
+    \textbf{Grain / NULL rules:} aggregate one-to-many sources before the final joins. Associated-PR count,
+    any-merged flag, and OpenSpec task counts are zero-filled; other missing metrics and undefined proportions remain NULL.
+  };
+\end{tikzpicture}

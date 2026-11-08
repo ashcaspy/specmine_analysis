@@ -1,0 +1,136 @@
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\definecolor{navy}{HTML}{213A5B}
+\definecolor{blue}{HTML}{3977A8}
+\definecolor{teal}{HTML}{27826F}
+\definecolor{gold}{HTML}{C88B2D}
+\definecolor{red}{HTML}{B94A55}
+\definecolor{violet}{HTML}{7656A5}
+\definecolor{paleBlue}{HTML}{EAF2F8}
+\definecolor{paleTeal}{HTML}{E9F4F0}
+\definecolor{paleGold}{HTML}{FBF3E4}
+\definecolor{paleRed}{HTML}{F9ECEC}
+\definecolor{paleViolet}{HTML}{F1ECF8}
+\tikzset{
+  data/.style={draw=blue!75!black,fill=paleBlue,rounded corners=1.5mm,
+    line width=.9pt,align=center,text width=2.8cm,minimum height=.8cm,
+    inner sep=4pt,font=\scriptsize},
+  auto/.style={draw=teal!80!black,fill=paleTeal,rounded corners=1.5mm,
+    line width=.9pt,align=center,text width=3.0cm,minimum height=.8cm,
+    inner sep=4pt,font=\scriptsize},
+  human/.style={draw=gold!85!black,fill=paleGold,rounded corners=1.5mm,
+    line width=.9pt,align=center,text width=2.8cm,minimum height=.8cm,
+    inner sep=4pt,font=\scriptsize},
+  result/.style={draw=violet!80!black,fill=paleViolet,rounded corners=1.5mm,
+    line width=1pt,align=center,text width=2.8cm,minimum height=.8cm,
+    inner sep=4pt,font=\scriptsize},
+  decision/.style={diamond,draw=teal!80!black,fill=paleTeal,line width=.9pt,
+    aspect=2,align=center,inner sep=2pt,font=\scriptsize},
+  rubric/.style={draw=navy,fill=white,rounded corners=2mm,line width=1.2pt,
+    text width=4.7cm,align=center,inner sep=6pt,font=\scriptsize},
+  flow/.style={-{Stealth[length=2mm]},draw=navy,line width=.85pt},
+  autoFlow/.style={flow,draw=teal!80!black},
+  humanFlow/.style={flow,draw=gold!85!black},
+  compareFlow/.style={flow,draw=violet!80!black},
+  reference/.style={-{Stealth[length=1.8mm]},draw=navy!75,dashed,line width=.8pt},
+  lab/.style={font=\tiny,fill=white,inner sep=1.2pt,text=navy,align=center},
+  heading/.style={font=\bfseries\small,text=navy},
+  cdecision/.style={draw=blue!75!black,fill=paleBlue,rounded corners=1mm,
+    line width=.8pt,text width=3.25cm,align=center,inner sep=4pt,font=\scriptsize}
+}
+\begin{tikzpicture}
+\node[draw=blue, shape=rectangle, minimum width=10cm, minimum height=539pt, loosely dashed, rounded corners, fill=blue!26, fill opacity=0.1] at (-9.05,2.5) {};
+\node[shape=rectangle, minimum width=10cm, minimum height=539pt, fill=paleGold, fill opacity=0.1, draw=gold!85!black, loosely dashed, rounded corners] at (1.27,2.45) {};
+\node[data] (spec) at (-3.75,12.95)
+    {\textbf{Spec JSONL}\\spec ID + Markdown content};
+
+\node[data] (spec2) at (1.5,10.2)
+      {\textbf{Validation sample}\\40 English SpecMine v1.0 specs\\20 OpenSpec + 20 other tools\\ordered + interleaved};
+\node[auto] (cache) at (-9.13,11.2)
+    {\textbf{Cache gate}\\ID + content SHA-256\\+ heuristic version};
+\node[auto] (parse) at (-9.13,9.5)
+    {\textbf{Parse signals}\\headings / lines\\words / lists / code fences};
+\draw[autoFlow] (spec) -- (cache);
+\draw[autoFlow] (cache) -- (parse);
+\node[draw=blue!40,fill=blue!3,rounded corners=2mm,line width=.7pt,
+    minimum width=130pt,minimum height=225pt] (node1) at (-11.6,4.35) {};
+\node[heading,anchor=west,text=blue!75!black] at (-13.21,8)
+    {COMPLETENESS};
+\node[cdecision] (sections) at (-11.6,6.8)
+    {\textbf{Section Coverage}\\count of headings\\Architecture, errors,\\ security, edge cases, data models};
+\node[cdecision] (detailed) at (-11.6,2.5)
+    {\textbf{Detailed Core}\\$w\geq250$ \\AND $n_{\rm req}\geq3$ \\OR lists $\geq5$\\OR code block present};
+\node[cdecision] (actionable) at (-11.6,4.65)
+    {\textbf{Actionable}\\measurable line OR lists $\geq2$\\OR code\\OR schema, acceptance criteria, test case, data model};
+\node[cdecision] (length) at (-11.6,1.1)
+    {\textbf{Length}\\$w\geq120$};
+\node[cdecision,text width=120pt] (cmap) at (-11.6,-1.3)
+    {\textbf{Completeness band mapping}\\
+    5: all sections\\ 4: detailed + $\geq4$\\ 3: detailed + $<4$\\
+    2: actionable or $w\geq120$\\ 1: other nonempty\\ 0: empty};
+\draw[autoFlow] (parse) -- (node1.north);
+\node[draw=teal!40,fill=teal!3,rounded corners=2mm,line width=.7pt,
+    minimum width=130pt,minimum height=225pt] (node2) at (-6.65,4.35) {};
+\node[heading,anchor=west,text=teal!80!black] at (-7.62,8.03)
+    {QUALITY};
+\node[auto,text width=3.5cm] (fractions) at (-6.54,6.79)
+    {\textbf{Measurability /\\vagueness}\\$n_{\rm req}$ requirement lines\\$M=m/n_{\rm req}$\\$V=v/n_{\rm req}$};
+\node[auto,text width=3.5cm] (structure) at (-6.54,4.9)
+    {\textbf{Structured}\\$\geq2$ headings OR $\geq3$ lists\\OR code block;\\higher bands also need $n\geq3$};
+\node[auto,text width=3.5cm] (conflict) at (-6.54,3)
+    {\textbf{Low-score Override}\\direct conflict \\OR $w\geq250$ AND unstructured\\AND $n_{\rm req}\geq5$};
+\node[auto,text width=3.7cm] (qband) at (-6.54,1.25)
+    {\textbf{Score-band Tests}\\5: $n\geq5,M\geq.90,V\leq.05$\\
+    4: $n\geq3,M\geq.75,V\leq.15$\\
+    3: $n\geq2,M\geq.40,V\leq.30$};
+\node[auto,text width=120pt, rounded corners=2.6pt] (qmap) at (-6.65,-1.3)
+    {\textbf{Quality band mapping}\\
+5 / 4: threshold + structure + $n\geq3$;\\
+3: threshold only\\
+2: any signal\\
+1: no signal\\
+0: empty};
+\draw[autoFlow] (parse) --  (node2.north);
+\node[rubric,text width=82.3802241pt, minimum height=66.3805591pt, node font=\small, draw=red, ultra thick, fill=red!18, fill opacity=1] (qualitySignals2) at (-3.9,-4.3) {\textbf{Completeness & Quality Rubrics}};
+\node[result,text width=4.7cm] (scoreBundle) at (-9.25,-4.3)
+    {\textbf{Heuristic score bundle}\\completeness + quality\\rule-derived scores, 0--5};
+\draw[autoFlow] (node1.south) -- (cmap.north);
+\draw[autoFlow] (spec) -- (spec2);
+\draw[autoFlow] (node2.south) -- (qmap.north);
+\draw[autoFlow] (cmap.south) -- (qualitySignals2.north west);
+\draw[autoFlow] (qualitySignals2.west) -- (scoreBundle.east);
+\draw[autoFlow] (qmap.south) -- (qualitySignals2.north west);
+\node[result] (record) at (-9.25,-6)
+    {\textbf{Heuristic record}\\two scores + evidence\\digest + method/version};
+\node[result] (dataset) at (-9.25,-8.25)
+    {\textbf{Scored corpus}\\one row per spec\\scores joined by ID\\sealed for validation};
+\draw[autoFlow] (scoreBundle.south) -- (record.north);
+\draw[autoFlow] (record) -- (dataset);
+\node[human] (packet) at (1.5,6.55)
+    {\textbf{Blind packet}\\ID + link + tool + full text\\computer scores hidden};
+\node[human,text width=3.0cm] (humanComplete) at (-0.4,4.2)
+    {\textbf{Assess completeness}\\read spec; assign 0--5\\reason + rubric-fit note};
+\node[human,text width=3.0cm] (humanQuality) at (3.41,4.22)
+    {\textbf{Assess quality}\\read spec; assign 0--5\\reason + rubric-fit note};
+\node[result,text width=3.1cm] (reveal) at (1.8,0.2)
+    {\textbf{Unblind + match}\\open computer scores\\only after all samples scored};
+\draw[humanFlow] (spec2) -- (packet);
+\draw[humanFlow] (packet) -- (humanComplete);
+\draw[humanFlow] (packet) -- (humanQuality);
+\draw[humanFlow] (humanQuality.south) -- (3.41,3) -- (-2.24,3) --  (qualitySignals2);
+\draw[humanFlow] (qualitySignals2.east) -- (-1.52,-4.3) -- (-1.5,1.25)-- (1.8,1.25) -- (reveal.north);
+\draw[humanFlow] (humanComplete) -- (-0.4,3);
+\draw[reference] (dataset.east) -- (-1,-8.25) -- (-1,-2.05) --(reveal.west)
+    node[pos=-2.937295,lab, above]{held until\\manual scores\\complete};
+\draw[reference] (cache.west) -- (-14.57,11.25) -- (-14.5,-8.25) --(dataset.west);
+\node[lab] (node3) at (-12.65,11.25) {same digest + version:\\reuse cached record};
+\node[result,text width=3.4cm] (agreement) at (1.8,-1.9)
+    {\textbf{Agreement by measure}\\exact / within $\pm1$\\bias direction};
+\node[result,text width=3.7cm] (errors) at (1.8,-4)
+    {\textbf{Error review}\\2--3 clear mistakes\\explain with saved evidence};
+\node[result,text width=3.8cm] (fit) at (1.85,-6.05)
+    {\textbf{Rubric-fit notes}\\spec type / not-applicable cases\\capture systematic misfit};
+\draw[compareFlow] (reveal) --  (agreement);
+\draw[compareFlow] (agreement) -- (errors);
+\draw[compareFlow] (errors) -- (fit);
+
+\end{tikzpicture}
