@@ -1,0 +1,105 @@
+\documentclass[tikz,border=8pt]{standalone}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\definecolor{navy}{HTML}{213A5B}
+\definecolor{blue}{HTML}{3977A8}
+\definecolor{teal}{HTML}{27826F}
+\definecolor{orange}{HTML}{C56A36}
+\definecolor{violet}{HTML}{7656A5}
+\definecolor{gray}{HTML}{586A7A}
+\definecolor{paleBlue}{HTML}{EAF2F8}
+\definecolor{paleTeal}{HTML}{E9F4F0}
+\definecolor{paleOrange}{HTML}{FCF0E7}
+\definecolor{paleViolet}{HTML}{F1ECF8}
+\tikzset{
+  panel/.style={draw=navy!35,fill=white,rounded corners=2mm,thick},
+  data/.style={draw=blue!75!black,fill=paleBlue,rounded corners=1.5mm,thick,
+    align=center,text width=3.2cm,minimum height=1.0cm,inner sep=5pt,font=\scriptsize},
+  prep/.style={draw=navy,fill=white,rounded corners=1.5mm,thick,
+    align=center,text width=3.2cm,minimum height=1.0cm,inner sep=5pt,font=\scriptsize},
+  stats/.style={draw=teal!80!black,fill=paleTeal,rounded corners=1.5mm,thick,
+    align=center,text width=4.0cm,minimum height=1.0cm,inner sep=5pt,font=\scriptsize},
+  test/.style={draw=orange!85!black,fill=paleOrange,rounded corners=1.5mm,thick,
+    align=center,text width=3.5cm,minimum height=1.0cm,inner sep=5pt,font=\scriptsize},
+  result/.style={draw=violet!80!black,fill=paleViolet,rounded corners=1.5mm,thick,
+    align=center,text width=4.1cm,inner sep=5pt,font=\scriptsize},
+  flow/.style={-{Stealth[length=2.2mm]},draw=navy,line width=.9pt},
+  statflow/.style={flow,draw=teal!80!black},
+  testflow/.style={flow,draw=orange!85!black}
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+
+  \node[data, minimum height=40.2581545pt] (auth) at (7.4,6.05) {
+    \textbf{Authorship labels}\\One row / spec\\4 classes
+  };
+  \node[data] (scores) at (3.35,6.07) {
+    \textbf{Completeness & Quality Scores}\\ID + completeness\\ + quality
+  };
+  \node[data] (audit) at (5.34,4.15) {
+    \textbf{Match audit}\\Matched $N$ + missing scores
+  };
+  \draw[flow] (scores.south) -- (audit);
+  \draw[flow] (auth.south) -- (audit);
+  \node[stats,text width=71.9999997pt, minimum height=36.988582pt] (desc) at (-1.75,4.15) {
+    \textbf{Descriptive Stats}\\
+    $N$ | Mean | Median | SD
+  };
+  \node[data,text width=4.0cm] (infer) at (5.32,2.45) {
+    \textbf{Inferential subset}\\
+    Human + AI + Collaborative\\
+    (Unknown excluded)
+  };
+  \node[draw=teal!71!black, shape=rectangle, minimum width=5.14cm, minimum height=173.561812pt, fill=teal, rounded corners, loosely dashed, fill opacity=0.1] (node2) at (7.9,-1.65) {};
+  \node[draw=blue!71!black, shape=rectangle, minimum width=5.14cm, minimum height=173.561812pt, fill=blue, rounded corners, loosely dashed, fill opacity=0.1] (node1) at (2.47,-1.65) {};
+  \node[draw=black, shape=rectangle, minimum width=389.8027559pt, minimum height=51.2149608pt, fill=white, rounded corners, fill opacity=0.5] at (3.65,-0.35) {};
+
+  \node[draw=black, shape=rectangle, minimum width=389.8027559pt, minimum height=86.2118507pt, fill=white, rounded corners, fill opacity=0.5] at (3.65,-3.05) {};
+  \draw[statflow] (audit.west) -- (desc.east);
+  \draw[flow] (audit.south) -- (infer.north);
+
+  \node[test,text width=3.6cm] (kwc2) at (2.52,-0.36) {
+      \textbf{Kruskal--Wallis}\\$H,p$\\
+      $\epsilon^2=(H-k+1)/(N-k)$
+    };
+  \node[test,text width=71.9999997pt, minimum height=51.2149609pt, fill opacity=0.5] (kwc3) at (-1.75,-0.35) {
+        \textbf{Kruskal--Wallis \\Tests}
+      };
+  \node[test,text width=3.6cm] (kwq) at (7.81,-0.36) {
+    \textbf{Kruskal--Wallis}\\$H,p$\\
+    $\epsilon^2=(H-k+1)/(N-k)$
+  };
+  \node[result,text width=114pt] (pairc) at (2.5,-2.22) {
+    \textbf{Human vs. AI}
+  
+  };
+  \node[result,text width=114pt] (pairc3) at (2.5,-3.09) {
+      \textbf{Human vs. Collaborative}
+  
+    };
+  \node[result,text width=114pt] (pairc4) at (2.5,-3.92) {
+      \textbf{AI vs. Collaborative}
+  
+    };
+  \node[result,text width=114pt] (pairc5) at (7.93,-2.22) {
+      \textbf{Human vs. AI}
+  
+    };
+  \node[result,text width=114pt] (pairc6) at (7.93,-3.09) {
+        \textbf{Human vs. Collaborative}
+  
+      };
+  \node[result,text width=114pt] (pairc7) at (7.93,-3.92) {
+        \textbf{AI vs. Collaborative}
+  
+      };
+  \node[result,text width=71.9999997pt, minimum height=86.2118514pt, fill opacity=0.5] (pairc2) at (-1.75,-3.05) {
+      \textbf{Two-Sided \\Mann--Whitney \\$U$ Tests}
+    };
+  \draw[flow] (infer) -- (node1.north);
+  \draw[flow] (infer) -- (node2.north);
+
+
+  \node at (2.49,1) {Completeness};
+  \node at (7.81,1) {Quality};
+\end{tikzpicture}
+\end{document}
