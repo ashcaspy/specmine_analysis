@@ -1,19 +1,15 @@
-\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\usetikzlibrary{arrows.meta}
 \definecolor{navy}{HTML}{213A5B}
 \definecolor{blue}{HTML}{3977A8}
 \definecolor{teal}{HTML}{27826F}
 \definecolor{orange}{HTML}{C56A36}
 \definecolor{violet}{HTML}{7656A5}
-\definecolor{gray}{HTML}{586A7A}
 \definecolor{paleBlue}{HTML}{EAF2F8}
 \definecolor{paleTeal}{HTML}{E9F4F0}
 \definecolor{paleOrange}{HTML}{FCF0E7}
 \definecolor{paleViolet}{HTML}{F1ECF8}
 \tikzset{
-  panel/.style={draw=navy!35,fill=white,rounded corners=2mm,thick},
   data/.style={draw=blue!75!black,fill=paleBlue,rounded corners=1.5mm,thick,
-    align=center,text width=3.2cm,minimum height=1.0cm,inner sep=5pt,font=\scriptsize},
-  prep/.style={draw=navy,fill=white,rounded corners=1.5mm,thick,
     align=center,text width=3.2cm,minimum height=1.0cm,inner sep=5pt,font=\scriptsize},
   stats/.style={draw=teal!80!black,fill=paleTeal,rounded corners=1.5mm,thick,
     align=center,text width=4.0cm,minimum height=1.0cm,inner sep=5pt,font=\scriptsize},
@@ -22,8 +18,7 @@
   result/.style={draw=violet!80!black,fill=paleViolet,rounded corners=1.5mm,thick,
     align=center,text width=4.1cm,inner sep=5pt,font=\scriptsize},
   flow/.style={-{Stealth[length=2.2mm]},draw=navy,line width=.9pt},
-  statflow/.style={flow,draw=teal!80!black},
-  testflow/.style={flow,draw=orange!85!black}
+  statflow/.style={flow,draw=teal!80!black}
 }
 \begin{tikzpicture}[font=\sffamily]
 

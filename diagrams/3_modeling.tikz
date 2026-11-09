@@ -1,4 +1,4 @@
-\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\usetikzlibrary{arrows.meta,shapes.geometric}
 \definecolor{navy}{HTML}{213A5B}
 \definecolor{blue}{HTML}{3977A8}
 \definecolor{teal}{HTML}{27826F}
@@ -33,129 +33,104 @@
   heading/.style={font=\bfseries\small,text=navy}
 }
 \begin{tikzpicture}[font=\sffamily]
-  \node[anchor=west,text=navy,font=\bfseries\Large] at (-15,13)
-    {RQ1 modeling | repository holdout, training-only preparation, separate score fits};
-  \draw[teal,line width=1.3pt] (-15,12.68) -- (16.2,12.68);
-
+  \node[prep,minimum width=815pt,minimum height=131.4517326pt] at (0.2,16.6) {};
+\node[data,text width=148.0341736pt, minimum height=132.0207885pt, node font=\large] (numeric2) at (-11.38,16.59)
+      {\textbf{Training Data Split}}; 
+  \node[prep,minimum width=815pt,minimum height=131.4517326pt] at (0.2,11.31) {};
+\node[train,text width=148.0341736pt, minimum height=132.0207885pt, node font=\large] (numeric2) at (-11.38,11.3)
+      {\textbf{Input Feature \\Candidate Filtering}}; 
+  \node[prep,minimum width=815pt,minimum height=131.4517326pt] at (0.2,6) {};
+\node[result,text width=148.0341736pt, minimum height=132.0207885pt, node font=\large] (numeric2) at (-11.38,5.99)
+      {\textbf{Model Training}}; 
   % Split by repository, not by specification, whenever multiple repositories exist.
-  \node[data] (input) at (-12.6,10.4)
+  \node[data, minimum height=59pt] (input) at (-6.25,16.69)
     {\textbf{Modeling data}\\one row / spec\\repository ID + scores};
-  \node[decision,text width=2.3cm] (split) at (-8.5,10.4)
+  \node[decision,text width=2.3cm] (split) at (-1.4,16.69)
     {\textbf{80 / 20 split}\\seed 625};
-  \node[train,text width=2.85cm] (trainrepos) at (-4.2,11.15)
-    {\textbf{TRAIN REPOSITORIES}\\80\% of groups};
-  \node[result,text width=2.85cm] (testrepos) at (-4.2,9.65)
+  \node[train,text width=2.85cm] (trainrepos) at (1.75,15.22)
+    {\textbf{TRAIN\\ REPOSITORIES}\\80\% of groups};
+  \node[result,text width=2.85cm] (testrepos) at (1.75,17.95)
     {\textbf{HELD-OUT REPOSITORIES}\\20\% of groups};
-  \node[train,text width=2.65cm] (trainset) at (.2,11.15)
+  \node[train,text width=2.65cm] (trainset) at (5.92,15.22)
     {\textbf{Training rows}\\observed score per fit};
-  \node[result,text width=2.65cm] (testset) at (.2,9.65)
+  \node[result,text width=2.65cm] (testset) at (5.92,17.95)
     {\textbf{Test rows}\\observed scores only};
-  \node[data,text width=2.7cm] (fallback) at (-8.5,8.35)
-    {\textbf{One-repository case}\\random 80 / 20 row split};
   \draw[flow] (input) -- (split);
-  \draw[trainflow] (split.east) -- ++(.45,0) |- (trainrepos.west);
-  \draw[testflow] (split.east) -- ++(.45,0) |- (testrepos.west);
+  \draw[trainflow] (split.south) -- ++(0,-0.52) -- (trainrepos.west);
+  \draw[testflow] (split.north) -- ++(0,0.36) -- (testrepos.west);
   \draw[trainflow] (trainrepos.east) -- (trainset.west);
   \draw[testflow] (testrepos.east) -- (testset.west);
-  \draw[flow,dashed] (split.south) -- (fallback.north);
-  \node[lab] at (-4.2,12.05) {repository groups never cross split};
 
   % Shared visual preparation recipe, executed independently for each score.
-  \node[prep,minimum width=29.2cm,minimum height=5.0cm] at (0,5.2) {};
-  \node[heading,anchor=west] at (-14.2,7.5)
-    {TRAIN-ONLY FEATURE PREPARATION \quad\textnormal{(repeat per score using its observed training rows)}};
-  \node[train,text width=2.4cm] (rows) at (-12.4,6.0)
-    {\textbf{Observed train rows}\\target-specific subset};
-  \node[train,text width=2.65cm] (eligibility) at (-8.9,6.0)
+ \node[train,text width=2.65cm] (eligibility) at (9.5,15.22)
     {\textbf{Row eligibility}\\at least 100\\cap at 50,000};
-  \node[decision,text width=2.35cm] (missing) at (-5.25,6.0)
-    {\textbf{Input missingness}\\$>80\%$?};
-  \node[train,text width=2.5cm] (numeric) at (-.2,6.8)
-    {\textbf{NUMERIC / BINARY}\\remove constant\\median impute\\standardize};
-  \node[train,text width=2.5cm] (categorical) at (-.2,4.8)
+  \node[decision,text width=2.35cm] (missing) at (-6.1,11.45)
+    {\textbf{Input \\missingness\\$>80\%$?}};
+  \node[train,text width=2.5cm] (numeric) at (-1.7,12.38)
+    {\textbf{NUMERIC / BINARY}\\remove constants;\\median; impute;\\standardize};
+  \node[train,text width=2.5cm] (categorical) at (-1.7,10.42)
     {\textbf{CATEGORICAL}\\$\leq60$ levels\\$\geq20$ rows / level};
-  \node[train,text width=2.5cm] (numericcorr) at (2.65,6.8)
-    {\textbf{Numeric redundancy}\\Spearman $|\rho|\geq.98$\\drop later candidate};
-  \node[train,text width=2.5cm] (rare) at (2.65,4.8)
-    {\textbf{Rare / unseen levels}\\pool rare to OTHER\\unseen to reference};
-  \node[train,text width=2.5cm] (encoded) at (6.55,4.8)
+  \node[train,text width=2.5cm] (numericcorr) at (4.95,12.38)
+    {\textbf{Numeric \\redundancy}\\Spearman $|\rho|\geq.98$\\drop later candidate};
+  \node[train,text width=2.5cm] (rare) at (1.55,10.35)
+    {\textbf{Rare / unseen\\ levels}\\pool rare to OTHER;\\unseen to reference};
+  \node[train,text width=2.5cm] (encoded) at (4.94,10.28)
     {\textbf{Encode categories}\\one-hot + standardize};
-  \node[train,text width=2.75cm] (design) at (9.0,5.9)
-    {\textbf{Design matrix}\\combine numeric + encoded\\drop duplicate columns\\$|r|\geq.999999$};
-  \node[train,text width=2.5cm] (leakage) at (12.8,5.9)
+  \node[train,text width=2.75cm] (design) at (8.8,11.48)
+    {\textbf{Design matrix}\\combine \\numeric + encoded\\drop duplicate \\columns\\$|r|\geq.999999$};
+  \node[train,text width=2.5cm] (leakage) at (12.35,11.54)
     {\textbf{Score-rule guard}\\exclude inputs overlapping\\heuristic score logic};
 
-  \draw[trainflow] (trainset.east) -- (2.3,11.15) -- (2.3,7.8)
-    -- (-12.4,7.8) -- (rows.north);
-  \draw[trainflow] (rows) -- (eligibility);
-  \draw[trainflow] (eligibility) -- (missing);
-  \draw[trainflow] (missing.east) -- ++(.45,0) |- (numeric.west);
-  \draw[trainflow] (missing.south) -- ++(0,-.35) -| (categorical.west);
-  \node[lab] at (-2.85,6.55) {retain numeric};
-  \node[lab] at (-2.8,4.95) {retain category};
-  \node[lab] at (-5.25,5.15) {drop if yes};
+  \draw[trainflow] (trainset.east) --(eligibility.west);
+  \draw[trainflow] (eligibility.south) -- ++(0,-0.66) -- ++(-15.6,0) -- (missing.north);
+  \draw[trainflow] (missing.east) -- (numeric.west);
+  \draw[trainflow] (missing.east) --(categorical.west);
+  \node[lab, node font=\scriptsize] at (-6.1,10.18) {drop if yes};
   \draw[trainflow] (numeric) -- (numericcorr);
   \draw[trainflow] (categorical) -- (rare);
   \draw[trainflow] (rare) -- (encoded);
-  \draw[trainflow] (numericcorr.east) -- ++(.45,0) |- (design.north west);
-  \draw[trainflow] (encoded.east) -- ++(.5,0) |- (design.south west);
+  \draw[trainflow] (numericcorr.east) --  (design.west);
+  \draw[trainflow] (encoded.east) -- (design.west);
   \draw[trainflow] (design) -- (leakage);
 
   % Two distinct score lanes; nothing is combined into a composite outcome.
-  \node[laneA,minimum width=29.2cm,minimum height=2.55cm] at (0,1.95) {};
-  \node[laneB,minimum width=29.2cm,minimum height=2.55cm] at (0,-1.45) {};
-  \node[data,text width=2.45cm] (complete) at (-12.3,1.75)
+  \node[data,text width=89.5597248pt] (complete) at (-6.7,7.35)
     {\texttt{target\_spec\_completeness}\\0--5};
-  \node[model] (fitA) at (-8.55,1.75)
+  \node[model] (fitA) at (-3.47,6)
     {\textbf{Fit candidates}\\HC3 OLS + intercept-only};
-  \node[decision,text width=2.25cm] (waldA) at (-4.75,1.75)
+  \node[decision,text width=2.25cm] (waldA) at (0.75,5.93)
     {\textbf{Joint Wald test}\\categorical terms};
-  \node[model] (reduceA) at (-.95,1.75)
+  \node[model] (reduceA) at (4.85,5.93)
     {\textbf{Reduce / refit}\\drop least significant\\if $p>.05$};
-  \node[result] (selectA) at (2.95,1.75)
-    {\textbf{Select candidate}\\lowest held-out RMSE\\tie: fewer predictors};
-  \node[result] (evalA) at (6.85,1.75)
-    {\textbf{Evaluate}\\RMSE, nRMSE, $R^2$\\clip prediction to [0,5]};
-  \node[result,text width=2.75cm] (reportA) at (11.0,1.75)
-    {\textbf{Report}\\score / feature effects\\predictions + diagnostics};
+  \node[result] (selectA) at (8.7,5.85)
+    {\textbf{Select candidate}\\lowest held-out\\ RMSE\\tie: fewer predictors};
+  \node[result] (evalA) at (12.53,5.78)
+    {\textbf{Evaluate}\\RMSE, nRMSE, $R^2$\\clip prediction \\to [0,5]};
 
-  \node[data,text width=2.45cm] (quality) at (-12.3,-1.65)
+  \node[data,text width=89.5597235pt] (quality) at (-6.7,4.61)
     {\texttt{target\_spec\_quality}\\0--5};
-  \node[model] (fitB) at (-8.55,-1.65)
-    {\textbf{Fit candidates}\\HC3 OLS + intercept-only};
-  \node[decision,text width=2.25cm] (waldB) at (-4.75,-1.65)
-    {\textbf{Joint Wald test}\\categorical terms};
-  \node[model] (reduceB) at (-.95,-1.65)
-    {\textbf{Reduce / refit}\\drop least significant\\if $p>.05$};
-  \node[result] (selectB) at (2.95,-1.65)
-    {\textbf{Select candidate}\\lowest held-out RMSE\\tie: fewer predictors};
-  \node[result] (evalB) at (6.85,-1.65)
-    {\textbf{Evaluate}\\RMSE, nRMSE, $R^2$\\clip prediction to [0,5]};
-  \node[result,text width=2.75cm] (reportB) at (11.0,-1.65)
-    {\textbf{Report}\\score / feature effects\\predictions + diagnostics};
 
-  \draw[trainflow] (leakage.east) -- ++(.45,0) -- (15.0,5.9)
-    -- (15.0,3.05) -- (-8.55,3.05) -- (fitA.north);
-  \draw[trainflow] (15.0,5.9) -- (15.0,-.75) -- (-8.55,-.75) -- (fitB.north);
+  \draw[trainflow] (leakage.south) -- ++(0,-1.3) 
+    -- (12.35,8) -- (-3.5,8) -- (fitA.north);
+  \draw[trainflow, densely dashed] (reduceA.south) -- ++(0,-1.14)
+       -- (-3.47,4.22) -- (fitA.south);
   \draw[trainflow] (complete) -- (fitA);
   \draw[trainflow] (fitA) -- (waldA);
   \draw[trainflow] (waldA) -- (reduceA);
   \draw[trainflow] (reduceA) -- (selectA);
   \draw[testflow] (selectA) -- (evalA);
-  \draw[flow] (evalA) -- (reportA);
 
-  \draw[trainflow] (quality) -- (fitB);
-  \draw[trainflow] (fitB) -- (waldB);
-  \draw[trainflow] (waldB) -- (reduceB);
-  \draw[trainflow] (reduceB) -- (selectB);
-  \draw[testflow] (selectB) -- (evalB);
-  \draw[flow] (evalB) -- (reportB);
+  \draw[trainflow] (quality) -- (fitA);
 
   % Held-out outcomes are used for candidate comparison and test reporting.
-  \draw[testflow] (testset.east) -- ++(1.0,0) -- (15.8,9.65)
-    -- (15.8,2.78) -- (6.85,2.78) -- (evalA.north);
-  \draw[testflow] (15.8,2.78) -- (15.8,-.4) -- (6.85,-.4) -- (evalB.north);
+  \draw[testflow] (testset.east) -- ++(1.0,0) -- (14,17.95)
+    -- (14,7.39) -- (12.53,7.39) -- (evalA.north);
 
-  \node[anchor=west,font=\scriptsize,text=navy] at (-14.2,-3.65)
-    {Fits, feature screening, and reports are independent by score; the outcomes are never combined.};
+
+
+
+
+
+
+
 \end{tikzpicture}

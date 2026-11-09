@@ -1,4 +1,4 @@
-\usetikzlibrary{arrows.meta,positioning,shapes.multipart,calc}
+\usetikzlibrary{arrows.meta,shapes.multipart}
 \definecolor{navy}{HTML}{213A5B}
 \definecolor{blue}{HTML}{3977A8}
 \definecolor{teal}{HTML}{27826F}
@@ -28,7 +28,6 @@
   transform/.style={-{Stealth[length=2mm]},draw=teal!80!black,line width=.85pt},
   join/.style={-{Stealth[length=2mm]},draw=violet!80!black,line width=.9pt},
   cardinality/.style={font=\tiny,fill=white,inner sep=1pt,text=navy,align=center},
-  note/.style={font=\scriptsize,text=navy,align=center}
 }
 \begin{tikzpicture}[font=\sffamily]
 
@@ -187,13 +186,4 @@
     node[pos=.77,cardinality,right]{LEFT JOIN\\on spec ID};
   \draw[join] (osagg.east) -- ++(0.68,0.01) -- ++(0,7.24) -| (output.east)
     node[pos=0.339077,cardinality,right]{LEFT JOIN\\on spec ID};
-
-  \node[note,anchor=west] at (-9.8,-6.3) {
-    \textbf{Manifest projection:} selected, validated candidate columns populate \texttt{\{FEATURE\_SELECT\}}.
-    Link counts are joined but not selected by the current manifest.
-  };
-  \node[note,anchor=west,text width=22cm,align=left] at (-9.8,-6.95) {
-    \textbf{Grain / NULL rules:} aggregate one-to-many sources before the final joins. Associated-PR count,
-    any-merged flag, and OpenSpec task counts are zero-filled; other missing metrics and undefined proportions remain NULL.
-  };
 \end{tikzpicture}
