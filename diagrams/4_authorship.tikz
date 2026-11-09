@@ -1,4 +1,4 @@
-\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\usetikzlibrary{arrows.meta}
 \definecolor{navy}{HTML}{213A5B}
 \definecolor{blue}{HTML}{3977A8}
 \definecolor{teal}{HTML}{27826F}
@@ -8,7 +8,6 @@
 \definecolor{paleBlue}{HTML}{EAF2F8}
 \definecolor{paleTeal}{HTML}{E9F4F0}
 \definecolor{paleRed}{HTML}{F9ECEC}
-\definecolor{paleViolet}{HTML}{F1ECF8}
 \tikzset{
   panel/.style={draw=navy!35,fill=white,rounded corners=2mm,thick},
   data/.style={draw=blue!75!black,fill=paleBlue,rounded corners=1.5mm,thick,

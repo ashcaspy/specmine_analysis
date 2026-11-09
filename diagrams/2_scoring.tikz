@@ -1,4 +1,4 @@
-\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\usetikzlibrary{arrows.meta}
 \definecolor{navy}{HTML}{213A5B}
 \definecolor{blue}{HTML}{3977A8}
 \definecolor{teal}{HTML}{27826F}
@@ -8,7 +8,6 @@
 \definecolor{paleBlue}{HTML}{EAF2F8}
 \definecolor{paleTeal}{HTML}{E9F4F0}
 \definecolor{paleGold}{HTML}{FBF3E4}
-\definecolor{paleRed}{HTML}{F9ECEC}
 \definecolor{paleViolet}{HTML}{F1ECF8}
 \tikzset{
   data/.style={draw=blue!75!black,fill=paleBlue,rounded corners=1.5mm,
@@ -23,8 +22,6 @@
   result/.style={draw=violet!80!black,fill=paleViolet,rounded corners=1.5mm,
     line width=1pt,align=center,text width=2.8cm,minimum height=.8cm,
     inner sep=4pt,font=\scriptsize},
-  decision/.style={diamond,draw=teal!80!black,fill=paleTeal,line width=.9pt,
-    aspect=2,align=center,inner sep=2pt,font=\scriptsize},
   rubric/.style={draw=navy,fill=white,rounded corners=2mm,line width=1.2pt,
     text width=4.7cm,align=center,inner sep=6pt,font=\scriptsize},
   flow/.style={-{Stealth[length=2mm]},draw=navy,line width=.85pt},
