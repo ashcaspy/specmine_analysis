@@ -73,8 +73,9 @@ database and back it up before restoring.
 
 This stage manually evaluates a sample of specifications using the provided
 completeness and quality rubric, then compares human assessments with the
-computer-generated scores. The supplied sample order contains 40 specs; the
-completed workbook is provided as an example of the scoring sheet. For the
+computer-generated scores. The supplied sample order lists 40 specs.
+`manual_scoring_complete.xlsx` holds the manual scores for the 30 that were
+reviewed; this is the data behind Table 2 in the paper. For the
 full process, rubric definitions, scoring rules, and comparison measures, see
 [manual_scoring/README.md](./manual_scoring/README.md). RQ1 uses deterministic
 heuristic measures for the full corpus.
