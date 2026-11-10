@@ -50,7 +50,7 @@ three stages:
 
 ```powershell
 py -3.15 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r .\requirements.txt duckdb datasets huggingface_hub pyarrow ipykernel
+.\.venv\Scripts\python.exe -m pip install -r .\requirements.txt duckdb==1.4.5 datasets huggingface_hub pyarrow ipykernel
 ```
 
 Use the `.venv` interpreter for RQ1. For RQ2, install `ipykernel` in that
