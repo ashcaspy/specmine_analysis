@@ -8,8 +8,13 @@ Check the computer-generated completeness and quality scores (0–5) by having a
 
 ### 1. Pick the sample
 
-- Draw 30–40 specs at random from the computer-scored set.
-- Ideally spread them across tools (OpenSpec, speckit, etc.), but with greater weight to OpenSpec as it represents the majority.
+`draw_sample.py` picks 40 specs and writes them to `sample_order.csv`:
+
+- Only specs that SpecMine labels as English (`lang = 'en'`).
+- Two groups of 20: OpenSpec specs, and specs from all other tools. OpenSpec has its own group because it makes up most of the dataset.
+- Within each group, the specs are sorted in a fixed order that looks random: by the md5 hash of the spec ID plus the text `ssw625`. The first 20 are taken. Rerunning the script gives the same 40.
+- The list alternates between the two groups, starting with OpenSpec.
+- One spec (`971e3ad574a4c7a5`) was replaced because its repository was no longer on GitHub when checked on 2026-10-18. The next spec in its group took its place at order 26. The `note` column records this.
 - Keep the computer's scores in a separate file, and don't open it until step 4.
 
 ### 2. Set up the scoring sheet
@@ -35,6 +40,8 @@ For each spec: read it, score it, write the reasons.
 Use the Manual scoring rubric. Score what it says, even where it seems unfair for a particular spec, and note the problem in the Notes column. That is itself a finding about the rubric.
 
 ### 4. Compare with the computer's scores
+
+`compare_scores.py` calculates these figures from the completed workbook.
 
 Only now open the computer's scores. For each measure, record:
 

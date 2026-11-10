@@ -50,7 +50,7 @@ three stages:
 
 ```powershell
 py -3.15 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r .\requirements.txt duckdb datasets huggingface_hub pyarrow ipykernel
+.\.venv\Scripts\python.exe -m pip install -r .\requirements.txt duckdb==1.4.5 datasets huggingface_hub pyarrow ipykernel
 ```
 
 Use the `.venv` interpreter for RQ1. For RQ2, install `ipykernel` in that
@@ -73,8 +73,9 @@ database and back it up before restoring.
 
 This stage manually evaluates a sample of specifications using the provided
 completeness and quality rubric, then compares human assessments with the
-computer-generated scores. The supplied sample order contains 40 specs; the
-completed workbook is provided as an example of the scoring sheet. For the
+computer-generated scores. The supplied sample order lists 40 specs.
+`manual_scoring_complete.xlsx` holds the manual scores for the 30 that were
+reviewed; this is the data behind Table 3 in the paper. For the
 full process, rubric definitions, scoring rules, and comparison measures, see
 [manual_scoring/README.md](./manual_scoring/README.md). RQ1 uses deterministic
 heuristic measures for the full corpus.
@@ -91,6 +92,13 @@ Set-Location $analysisRepository
 
 Regeneration replaces the sample-order file; it is not needed when using the
 provided sample and completed workbook.
+
+To recompute Table 3 (manual vs. computer scores) and check for duplicate IDs
+and missing specs:
+
+```powershell
+.\.venv\Scripts\python.exe .\manual_scoring\compare_scores.py
+```
 
 ## 3. RQ1: extraction, heuristic scoring, and regression modeling
 
