@@ -31,7 +31,7 @@ The analysis includes:
 
 ## Files
 
-`RQ2Code (1).ipynb` – Jupyter Notebook containing the data processing, authorship classification, statistical analysis, and visualizations used to answer RQ2
+SpecMine RQ2.ipynb – Jupyter Notebook containing the data processing, authorship classification, statistical analysis, and visualizations used to answer RQ2
 
 ## Dataset
 
