@@ -1,0 +1,19 @@
+exact_account_login,evidence_observable_in_submitted_data,independent_identity_verification,interpretation_and_limitation
+claude,Exact account login in commit author or committer metadata; no literal [bot] suffix,Not independently verified,"Product-associated name; generic handle, not independently verified"
+copilot,Exact account login in commit author or committer metadata; no literal [bot] suffix,Not independently verified,"Product-associated name; generic handle, not independently verified"
+google-labs-jules[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Explicit Jules product/organization naming and bot suffix; ownership not independently verified
+cursoragent,Exact account login in commit author or committer metadata; no literal [bot] suffix,Not independently verified,Cursor agent-style handle; identity not independently verified
+codex-scheduled-tasks[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Codex task naming and bot suffix; identity not independently verified
+d-sorgcodexagent[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Codex agent naming and bot suffix; identity not independently verified
+codex,Exact account login in commit author or committer metadata; no literal [bot] suffix,Not independently verified,"Product-associated name; generic handle, not independently verified"
+d-sorgclaudeagent[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Claude agent naming and bot suffix; identity not independently verified
+lovable-dev[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Lovable service naming and bot suffix; identity not independently verified
+fullsend-ai-coder[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,AI-coder self-description and bot suffix; ownership not independently verified
+claude[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Claude product naming and bot suffix; ownership not independently verified
+agnt-platform[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Agent-platform naming and bot suffix; ownership not independently verified
+devin-ai-integration[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Devin integration naming and bot suffix; ownership not independently verified
+cursor[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Cursor product naming and bot suffix; ownership not independently verified
+jessica-claude[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Claude naming and bot suffix; identity not independently verified
+aiagentxinlocal[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,AI-agent self-description and bot suffix; ownership not independently verified
+kilo-code-bot[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,Kilo Code naming and bot suffix; ownership not independently verified
+opencode-agent[bot],Exact account login in commit author or committer metadata; literal [bot] suffix,Not independently verified,OpenCode agent naming and bot suffix; ownership not independently verified
