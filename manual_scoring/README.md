@@ -41,6 +41,8 @@ Use the Manual scoring rubric. Score what it says, even where it seems unfair fo
 
 ### 4. Compare with the computer's scores
 
+`compare_scores.py` calculates these figures from the completed workbook.
+
 Only now open the computer's scores. For each measure, record:
 
 - How often you agree exactly

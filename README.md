@@ -93,6 +93,13 @@ Set-Location $analysisRepository
 Regeneration replaces the sample-order file; it is not needed when using the
 provided sample and completed workbook.
 
+To recompute Table 2 (manual vs. computer scores) and check for duplicate IDs
+and missing specs:
+
+```powershell
+.\.venv\Scripts\python.exe .\manual_scoring\compare_scores.py
+```
+
 ## 3. RQ1: extraction, heuristic scoring, and regression modeling
 
 RQ1 needs the populated MySQL database, the expanded JSONL spec-text file, and
