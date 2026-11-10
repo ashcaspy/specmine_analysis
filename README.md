@@ -75,7 +75,7 @@ This stage manually evaluates a sample of specifications using the provided
 completeness and quality rubric, then compares human assessments with the
 computer-generated scores. The supplied sample order lists 40 specs.
 `manual_scoring_complete.xlsx` holds the manual scores for the 30 that were
-reviewed; this is the data behind Table 2 in the paper. For the
+reviewed; this is the data behind Table 3 in the paper. For the
 full process, rubric definitions, scoring rules, and comparison measures, see
 [manual_scoring/README.md](./manual_scoring/README.md). RQ1 uses deterministic
 heuristic measures for the full corpus.
@@ -93,7 +93,7 @@ Set-Location $analysisRepository
 Regeneration replaces the sample-order file; it is not needed when using the
 provided sample and completed workbook.
 
-To recompute Table 2 (manual vs. computer scores) and check for duplicate IDs
+To recompute Table 3 (manual vs. computer scores) and check for duplicate IDs
 and missing specs:
 
 ```powershell

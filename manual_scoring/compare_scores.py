@@ -1,4 +1,4 @@
-"""Compare the manual scores with the computer's (heuristic) scores: Table 2 in the paper.
+"""Compare the manual scores with the computer's (heuristic) scores: Table 3 in the paper.
 
 Reads:
 - manual_scoring/manual_scoring_complete.xlsx  (sheet "Scoring": the manual scores)
