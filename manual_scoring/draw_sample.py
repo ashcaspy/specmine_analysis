@@ -11,8 +11,11 @@ EXCLUDED lists specs whose link no longer loaded when the sample was checked (20
 Each one keeps its place in the list but is swapped for the next spec in its group's order
 after the first 20.
 
-Run from the project root:
-    .venv/bin/python manual_scoring/draw_sample.py [output.csv]
+Run from the specmine-zenodo folder (beside this repository), so the data/ paths resolve,
+and pass the output path back into the repository:
+    ../<analysis-repository>/.venv/bin/python ../<analysis-repository>/manual_scoring/draw_sample.py ../<analysis-repository>/manual_scoring/sample_order.csv
+
+See "2. Manual sample scoring" in the root README for the PowerShell version.
 """
 import csv
 import sys
